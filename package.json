@@ -4,7 +4,7 @@
     "description": "Backend and database for project place",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon mongoes.js",
+        "start": "nodemon index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Mohit kumar",

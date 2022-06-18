@@ -1,5 +1,5 @@
 const express = require('express')
-const port = 7000;
+const port = 7000 || process.env.PORT;
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -17,8 +17,8 @@ app.listen(port, (err) => {
     if (err)
         console.log('There is an error inn running');
 
-    console.log(`server is running at ${port}`);
-})
+    console.log(`server is running at ${port}`); 
+}) 
 
 app.get('/findprojects', async(req, res) => {
     const dbData=await dbConnect();
@@ -32,7 +32,7 @@ app.get('/userproject/:username', async(req, res) => {
     const dbData=await dbConnect();
     const username=req.params.username;;
     const nUsername=username.toString();
-    const allProjects= await dbData.find({projectName:nUsername}).toArray();
+    const allProjects= await dbData.find({userName:nUsername}).toArray();
      res.send(allProjects);
     //res.send('Find projects')
 })
@@ -47,6 +47,46 @@ app.get('/project/:projectId', async(req, res) => {
     //res.send('Find projects')
 })
 
+// api for Adding a project
+app.post('/addproject', async(req, res) => {
+    const dbData=await dbConnect();
 
+    const Upname = req.body.UserPname;
+    const Upid = req.body.UserPid;
+    const Uphl = req.body.UserPHl;
+    const Updsc = req.body.UserPDesc;
+    const Uptechno = req.body.UserPtechno;
+    const Upalink = req.body.UserPanLink;
+    const CuUser = req.body.cUser;
+
+
+     
+    const allProjects= await dbData.insertOne(
+        {
+            projectId: Upid.toString(),
+            projectName: Upname.toString(),
+            userName:CuUser.toString(),
+            aboutProject:Updsc.toString(),
+            techUsed:Uptechno.toString(),
+            upVotes:'10'.toString(),
+            liveLink:Uphl.toString(),
+            codeLink:Upalink.toString()
+        },
+        function (err, result) {
+            if (err) {
+              res.status(400).send("Error inserting matches!");
+            } else {
+              console.log(`Added a new match with id ${result.insertedId}`);
+              res.status(204).send();
+            }
+          })  
+    // console.log(allProjects);  
+    //    res.send(allProjects)   
+    // if (allProjects.acknowledged == true) {
+    //     console.log("Item inserted")
+    // } else {
+    //     console.log("Error occurred while inserting");
+    // }
+})
 // use put 
-// use delete
+// use delete 
