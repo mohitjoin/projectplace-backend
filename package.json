@@ -4,9 +4,9 @@
     "description": "Backend and database for project place",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon index.js",
+        "start": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start-p":"node index.js"
+        "start-p":"nodemon index.js"
     },
     "author": "Mohit kumar",
     "license": "ISC",
