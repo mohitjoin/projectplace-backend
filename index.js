@@ -1,8 +1,11 @@
+require("dotenv").config();
 const express = require('express')
-const port = process.env.PORT || 7000  ;
+const port = process.env.PORT || 7000  ;  
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const Razorpay = require("razorpay");
+
 app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json()) // use while pass data
@@ -90,3 +93,33 @@ app.post('/addproject', async(req, res) => {
 })
 // use put 
 // use delete 
+
+// Razerpay route
+
+
+app.post('/payments', async (req, res) => {
+    console.log("Razerpay api");
+    const amont = req.body.amount*100;
+    try {
+        const instance = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_SECRET,
+        });
+
+        const options = {
+            amount: amont, // amount in smallest currency unit
+            currency: "INR",
+            receipt: "receipt_order_premium",
+        };
+
+        const order = await instance.orders.create(options);
+
+        if (!order) return res.status(500).send("Some error occured");
+
+        res.json(order);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+
+    
+});
