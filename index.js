@@ -98,8 +98,8 @@ app.post('/addproject', async(req, res) => {
 
 
 app.post('/payments', async (req, res) => {
-    console.log("Razerpay api");
-    const amont = req.body.amount*100;
+    // console.log("Razerpay api");
+    const amont = (+req.body.amount)*100;
     try {
         const instance = new Razorpay({
             key_id: process.env.RAZORPAY_KEY_ID,
@@ -107,7 +107,7 @@ app.post('/payments', async (req, res) => {
         });
 
         const options = {
-            amount: amont, // amount in smallest currency unit
+            amount: +amont, // amount in smallest currency unit
             currency: "INR",
             receipt: "receipt_order_premium",
         };
